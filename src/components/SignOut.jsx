@@ -8,12 +8,10 @@ export function SignOut() {
     const navigate = useNavigate()
 
     useEffect(() => {
-
         localStorage.removeItem("userToken")
         localStorage.removeItem("user")
         navigate("/sign-in")
         setUser({})
-
     }, [])
 
 

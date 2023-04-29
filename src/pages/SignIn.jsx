@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export function SignIn() {
-    const { updateUser, role } = useAuth()
+    const { updateUser } = useAuth()
     const navigate = useNavigate()
 
     const toast = useToast();
