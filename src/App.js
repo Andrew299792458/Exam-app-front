@@ -16,6 +16,7 @@ function App() {
         <AuthProvider>
           <Header />
           <Routes>
+            <Route path="/*" element={<SignIn />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/add-user" element={<AddUser />} />
             <Route path="/board" element={<Board />} />
