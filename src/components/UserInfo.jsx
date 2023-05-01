@@ -1,13 +1,19 @@
 import axios from "axios"
 import { useState, useEffect } from "react";
-import { Box, Flex} from "@chakra-ui/react"
+import { Box, Flex } from "@chakra-ui/react"
+import { useAuth } from "../contexts/AuthContext";
+
 
 export default function UserInfo(id) {
-    const [users, setUsers] = useState([])
-    const [user, setUser] = useState([])
+    const { user } = useAuth()
 
-    useEffect(() => {
-        axios.get("http://localhost:3001/users", {
+    const [users, setUsers] = useState([])
+    const [currentUser, setCurrentUser] = useState([])
+
+    const AllUsers = async () => {
+        await axios.post("http://localhost:3001/users", {
+            role: user.role
+        }, {
             headers: {
                 "x-access-token": localStorage.getItem("userToken")
             }
@@ -17,19 +23,26 @@ export default function UserInfo(id) {
             .catch((err) => {
                 console.log(err)
             });
+    }
+
+    useEffect(() => {
+        if (user.role === "admin") {
+            AllUsers()
+        }
     }, [])
+
     useEffect(() => {
         const findUser = () => {
             const findMyUser = users.find(user => user._id === id.id);
-            setUser(findMyUser);
+            setCurrentUser(findMyUser);
         }
         findUser();
     }, [users, id]);
 
     return (<>
         <Box>
-            {user ? <Flex gap={3} color="gray.400" justifyContent={"center"}>
-         {user.firstName}  {user.lastName}</Flex> : "user"}
+            {currentUser ? <Flex gap={3} color="gray.400" justifyContent={"center"}>
+                {currentUser.firstName}  {currentUser.lastName}</Flex> : null}
         </Box>
     </>)
 

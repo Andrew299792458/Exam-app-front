@@ -1,8 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Select, Flex, Box, Input, Button, Heading, Text, useToast } from "@chakra-ui/react"
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 
 export function AddUser() {
+    const { user } = useAuth()
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const toast = useToast();
     const successToast = () => {
@@ -24,17 +26,18 @@ export function AddUser() {
         });
     };
 
-
-
     const AddNewUser = async (data) => {
 
         await axios.post("http://localhost:3001/create-user", {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
-            age: data.age,
-            password: data.password,
-            role: data.role
+            role: user.role,
+            userData: {
+                firstName: data.firstName,
+                lastName: data.lastName,
+                email: data.email,
+                age: data.age,
+                password: data.password,
+                role: data.role
+            }
         }, {
             headers: {
                 "x-access-token": localStorage.getItem("userToken")

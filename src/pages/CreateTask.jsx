@@ -14,16 +14,20 @@ export function CreateTask() {
     const userId = watch("Assign")
 
     useEffect(() => {
-        axios.get("http://localhost:3001/users", {
-            headers: {
-                "x-access-token": localStorage.getItem("userToken")
-            }
-        }).then((res) => {
-            setUsers(res.data.users)
-        })
-            .catch((err) => {
-                console.log(err)
-            });
+        if (user.role === "admin") {
+            axios.post("http://localhost:3001/users", {
+                role: user.role
+            }, {
+                headers: {
+                    "x-access-token": localStorage.getItem("userToken")
+                }
+            }).then((res) => {
+                setUsers(res.data.users)
+            })
+                .catch((err) => {
+                    console.log(err)
+                });
+        }
     }, [])
 
     const create = async (data) => {
@@ -78,7 +82,7 @@ export function CreateTask() {
                         <Heading
                         >Create Task</Heading>
                         {user.role === "admin" ? <Select placeholder="Assign" {...register("Assign")}>{users ? users.map((user) => {
-                            return <option key={user._id} value={user._id}>{user.firstName}</option>
+                            return <option key={user._id} value={user._id}>{user.firstName}  {user.lastName}</option>
                         }) : null}</Select> : null}
                         <Input placeholder="Title"
                             mt={6}
